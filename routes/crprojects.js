@@ -24,6 +24,10 @@ router.post('/', [
 router.put('/:id', [
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existeProyectoPorId ),
+    check('codigo', 'El código es obligatorio').not().isEmpty(),
+    check('nombreproyecto', 'El nombre del proyecto es obligatorio').not().isEmpty(),
+    check('paisqueejecuta', 'El país que ejecuta es obligatorio').not().isEmpty(),
+    check('fechacierre', 'La fecha es obligatoria').not().isEmpty(),
     validarCampos
 ]
 , crprojectController.crprojectsPut);

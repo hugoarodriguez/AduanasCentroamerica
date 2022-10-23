@@ -53,15 +53,31 @@ const crprojectsPut = async (req, res) => {
 
     const {id} = req.params;
     const body = req.body;
-    const crproject = {...body};
+    const validarFecha = await utils.validaFecha(body.fechacierre);
+    
+    if(validarFecha === true){
 
-    const crprojectToUpdate = await CRProject.findByIdAndUpdate(id, crproject);
-
-    res.json({
-        msg: 'PUT API - crprojectPut',
-        crprojectUpdated: crprojectToUpdate,
-        developerInfo
-    });
+        const crproject = {...body};
+    
+        const crprojectToUpdate = await CRProject.findByIdAndUpdate(id, crproject);
+    
+        res.json({
+            msg: 'PUT API - crprojectPut',
+            crprojectUpdated: crprojectToUpdate,
+            developerInfo
+        });
+        
+    } else {
+        res.json({
+            "errors": [
+                {
+                    "msg": "Formato de fecha inválido, debe ser YYYY-MM-DD",
+                    "param": "fechacierre",
+                    "location": "body"
+                }
+            ]
+        });
+    }
 }
 const crprojectsDelete = async (req, res) => {
 

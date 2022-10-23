@@ -1,6 +1,7 @@
 const { Router } = require('express');
 
 const GTProject = require('../models/grproject.js')
+const utils = require('../middlewares/utils.js')
 const developerInfo = "2506632017 - Rodríguez Cruz Hugo Alexander"
 
 const gtprojectsGet = async (req, res) => {
@@ -24,31 +25,62 @@ const gtprojectsGet = async (req, res) => {
 const gtprojectsPost = async (req, res) => {
 
     const body = req.body;
-    body.fecha = new Date();
-    const gtproject = new GTProject(body);
+    const validarFecha = await utils.validaFecha(body.fecha);
 
-    await gtproject.save();
+    if(validarFecha === true){
 
-    res.json({
-        msg: 'POST API - gtprojectPost',
-        gtproject,
-        developerInfo
-    });
+        const gtproject = new GTProject(body);
+    
+        await gtproject.save();
+    
+        res.json({
+            msg: 'POST API - gtprojectPost',
+            gtproject,
+            developerInfo
+        });
+        
+    } else {
+        res.json({
+            "errors": [
+                {
+                    "msg": "Formato de fecha inválido, debe ser YYYY-MM-DD",
+                    "param": "fecha",
+                    "location": "body"
+                }
+            ]
+        });
+    }
+
 }
 const gtprojectsPut = async (req, res) => {
 
     const {id} = req.params;
     const body = req.body;
-    body.fecha = new Date();
-    const gtproject = {...body};
+    const validarFecha = await utils.validaFecha(body.fecha);
+    
+    if(validarFecha === true){
 
-    const gtprojectToUpdate = await GTProject.findByIdAndUpdate(id, gtproject);
+        const gtproject = {...body};
+    
+        const gtprojectToUpdate = await GTProject.findByIdAndUpdate(id, gtproject);
+    
+        res.json({
+            msg: 'PUT API - gtprojectPut',
+            gtprojectUpdated: gtprojectToUpdate,
+            developerInfo
+        });
 
-    res.json({
-        msg: 'PUT API - gtprojectPut',
-        gtprojectUpdated: gtprojectToUpdate,
-        developerInfo
-    });
+    } else {
+        res.json({
+            "errors": [
+                {
+                    "msg": "Formato de fecha inválido, debe ser YYYY-MM-DD",
+                    "param": "fecha",
+                    "location": "body"
+                }
+            ]
+        });
+    }
 }
 const gtprojectsDelete = async (req, res) => {
 

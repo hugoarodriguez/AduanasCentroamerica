@@ -20,6 +20,6 @@ const existeProyectoCRPorId = async( id ) => {
 }
 
 module.exports = {
-    existeProyectoPorId: existeProyectoGTPorId
+    existeProyectoGTPorId, existeProyectoCRPorId
 }
 

@@ -7,6 +7,7 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
         this.grProjectPath = '/api/servicegt';
+        this.crProjectPath = '/api/servicecr';
 
         //Conectar a la BD
         this.conectDB();
@@ -41,6 +42,7 @@ class Server {
     routes() {
 
         this.app.use(this.grProjectPath, require('../routes/gtprojects.js'));
+        this.app.use(this.crProjectPath, require('../routes/crprojects.js'));
 
     }
 

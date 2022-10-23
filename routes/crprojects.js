@@ -3,7 +3,7 @@ const router = Router();
 const {check} = require('express-validator');
 
 const { validarCampos } = require('../middlewares/validar-campos');
-const { existeProyectoPorId, esFechaValida } = require('../helpers/db-validators');
+const { existeProyectoCRPorId } = require('../helpers/db-validators');
 
 const crprojectController = require('../controllers/crprojects.js');
 
@@ -23,7 +23,7 @@ router.post('/', [
 //Código para Actualizar - PUT
 router.put('/:id', [
     check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom( existeProyectoPorId ),
+    check('id').custom( existeProyectoCRPorId ),
     check('codigo', 'El código es obligatorio').not().isEmpty(),
     check('nombreproyecto', 'El nombre del proyecto es obligatorio').not().isEmpty(),
     check('paisqueejecuta', 'El país que ejecuta es obligatorio').not().isEmpty(),
@@ -35,7 +35,7 @@ router.put('/:id', [
 //Código para Borrar - DELETE
 router.delete('/:id', [
     check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom( existeProyectoPorId ),
+    check('id').custom( existeProyectoCRPorId ),
     validarCampos
 ], crprojectController.crprojectsDelete);
 

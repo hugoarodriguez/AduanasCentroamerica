@@ -3,7 +3,7 @@ const router = Router();
 const {check} = require('express-validator');
 
 const { validarCampos } = require('../middlewares/validar-campos');
-const { existeProyectoPorId } = require('../helpers/db-validators');
+const { existeProyectoGTPorId } = require('../helpers/db-validators');
 
 const gtprojectController = require('../controllers/gtprojects.js');
 
@@ -23,7 +23,7 @@ router.post('/', [
 //Código para Actualizar - PUT
 router.put('/:id', [
     check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom( existeProyectoPorId ),
+    check('id').custom( existeProyectoGTPorId ),
     check('codigo', 'El código es obligatorio').not().isEmpty(),
     check('nombreproyecto', 'El nombre del proyecto es obligatorio').not().isEmpty(),
     check('monto', 'El monto no es válido').isDecimal(),
@@ -35,7 +35,7 @@ router.put('/:id', [
 //Código para Borrar - DELETE
 router.delete('/:id', [
     check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom( existeProyectoPorId ),
+    check('id').custom( existeProyectoGTPorId ),
     validarCampos
 ], gtprojectController.gtprojectsDelete);
 
